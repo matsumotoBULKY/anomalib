@@ -33,6 +33,7 @@ def get_args() -> Namespace:
     parser.add_argument("--model", type=str, default="padim", help="Name of the algorithm to train/test")
     parser.add_argument("--config", type=str, required=False, help="Path to a model config file")
     parser.add_argument("--log-level", type=str, default="INFO", help="<DEBUG, INFO, WARNING, ERROR>")
+    parser.add_argument("--category", type=str, default="bottle", help="Select category")
 
     args = parser.parse_args()
     return args
@@ -46,7 +47,7 @@ def train():
     if args.log_level == "ERROR":
         warnings.filterwarnings("ignore")
 
-    config = get_configurable_parameters(model_name=args.model, config_path=args.config)
+    config = get_configurable_parameters(model_name=args.model, config_path=args.config, category=args.category)
     if config.project.seed:
         seed_everything(config.project.seed)
 
