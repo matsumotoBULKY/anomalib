@@ -15,13 +15,10 @@ from omegaconf import DictConfig, ListConfig, OmegaConf
 
 def update_input_size_config(config: Union[DictConfig, ListConfig]) -> Union[DictConfig, ListConfig]:
     """Update config with image size as tuple, effective input size and tiling stride.
-
     Convert integer image size parameters into tuples, calculate the effective input size based on image size
     and crop size, and set tiling stride if undefined.
-
     Args:
         config (Union[DictConfig, ListConfig]): Configurable parameters object
-
     Returns:
         Union[DictConfig, ListConfig]: Configurable parameters with updated values
     """
@@ -42,10 +39,8 @@ def update_input_size_config(config: Union[DictConfig, ListConfig]) -> Union[Dic
 
 def update_nncf_config(config: Union[DictConfig, ListConfig]) -> Union[DictConfig, ListConfig]:
     """Set the NNCF input size based on the value of the crop_size parameter in the configurable parameters object.
-
     Args:
         config (Union[DictConfig, ListConfig]): Configurable parameters of the current run.
-
     Returns:
         Union[DictConfig, ListConfig]: Updated configurable parameters in DictConfig object.
     """
@@ -64,15 +59,11 @@ def update_nncf_config(config: Union[DictConfig, ListConfig]) -> Union[DictConfi
 
 def update_multi_gpu_training_config(config: Union[DictConfig, ListConfig]) -> Union[DictConfig, ListConfig]:
     """Updates the config to change learning rate based on number of gpus assigned.
-
     Current behaviour is to ensure only ddp accelerator is used.
-
     Args:
         config (Union[DictConfig, ListConfig]): Configurable parameters for the current run
-
     Raises:
         ValueError: If unsupported accelerator is passed
-
     Returns:
         Union[DictConfig, ListConfig]: Updated config
     """
@@ -105,19 +96,18 @@ def update_multi_gpu_training_config(config: Union[DictConfig, ListConfig]) -> U
 def get_configurable_parameters(
     model_name: Optional[str] = None,
     config_path: Optional[Union[Path, str]] = None,
+    category: Optional[str] = None,
     weight_file: Optional[str] = None,
     config_filename: Optional[str] = "config",
     config_file_extension: Optional[str] = "yaml",
 ) -> Union[DictConfig, ListConfig]:
     """Get configurable parameters.
-
     Args:
         model_name: Optional[str]:  (Default value = None)
         config_path: Optional[Union[Path, str]]:  (Default value = None)
         weight_file: Path to the weight file
         config_filename: Optional[str]:  (Default value = "config")
         config_file_extension: Optional[str]:  (Default value = "yaml")
-
     Returns:
         Union[DictConfig, ListConfig]: Configurable parameters in DictConfig object.
     """
@@ -135,6 +125,8 @@ def get_configurable_parameters(
     # Dataset Configs
     if "format" not in config.dataset.keys():
         config.dataset.format = "mvtec"
+
+    config.dataset.category = category
 
     config = update_input_size_config(config)
 
