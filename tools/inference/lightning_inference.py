@@ -26,6 +26,7 @@ def get_args() -> Namespace:
     parser.add_argument("--weights", type=Path, required=True, help="Path to model weights")
     parser.add_argument("--input", type=Path, required=True, help="Path to image(s) to infer.")
     parser.add_argument("--output", type=str, required=False, help="Path to save the output image(s).")
+    parser.add_argument("--category", type=str, required=True, help="Select category")
     parser.add_argument(
         "--visualization_mode",
         type=str,
@@ -48,7 +49,7 @@ def get_args() -> Namespace:
 def infer():
     """Run inference."""
     args = get_args()
-    config = get_configurable_parameters(config_path=args.config)
+    config = get_configurable_parameters(config_path=args.config, category=args.category)
     config.trainer.resume_from_checkpoint = str(args.weights)
     config.visualization.show_images = args.show
     config.visualization.mode = args.visualization_mode
